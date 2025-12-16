@@ -1,5 +1,7 @@
 package fr.univeiffel.mas.datatypes;
 
+import java.util.Comparator;
+
 public class Position {
 
 	private int shares;
