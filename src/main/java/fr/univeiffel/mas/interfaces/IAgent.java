@@ -5,7 +5,7 @@ import fr.univeiffel.mas.datatypes.Position;
 import java.util.List;
 
 public interface IAgent {
-
+	public void setup();
 	public List<Position> getPositions();
 	public IOffer getOffer(double currentPrice);
 	public void removePosition(Position position);

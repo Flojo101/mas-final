@@ -7,7 +7,7 @@ import fr.univeiffel.mas.interfaces.IOffer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LLMAgent implements IAgent {
+public class MMAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
 
