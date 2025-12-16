@@ -5,6 +5,8 @@ import fr.univeiffel.mas.datatypes.Position;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +14,17 @@ public class LLMAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
 
+	private URL LLMURL;
+
 	@Override
 	public void setup() {
 		accountBalance = Configuration.BasicAgentStartingBalance;
+
+		try {
+			LLMURL = new URL(Configuration.LLMAddress);
+		} catch (MalformedURLException e) {
+
+		}
 	}
 
 	@Override
