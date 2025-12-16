@@ -4,12 +4,22 @@ import fr.univeiffel.mas.interfaces.IOffer;
 
 public class NoOffer implements IOffer {
 	@Override
-	public int getValue() {
+	public int getShares() {
 		return 0;
 	}
 
 	@Override
-	public void setValue(int value) {
+	public void setShares(int shares) {
+
+	}
+
+	@Override
+	public double getPrice() {
+		return 0;
+	}
+
+	@Override
+	public void setPrice(double price) {
 
 	}
 }

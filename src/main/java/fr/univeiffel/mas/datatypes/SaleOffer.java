@@ -3,15 +3,26 @@ package fr.univeiffel.mas.datatypes;
 import fr.univeiffel.mas.interfaces.IOffer;
 
 public class SaleOffer implements IOffer {
-	private int value;
+	private int shares;
+	private double price;
 
 	@Override
-	public int getValue() {
-		return value;
+	public int getShares() {
+		return shares;
 	}
 
 	@Override
-	public void setValue(int value) {
-		this.value = value;
+	public void setShares(int shares) {
+		this.shares = shares;
+	}
+
+	@Override
+	public double getPrice() {
+		return price;
+	}
+
+	@Override
+	public void setPrice(double price) {
+		this.price = price;
 	}
 }

@@ -1,8 +1,7 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
-import fr.univeiffel.mas.datatypes.MarketInformation;
-import fr.univeiffel.mas.datatypes.Position;
+import fr.univeiffel.mas.datatypes.*;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 
@@ -25,7 +24,24 @@ public class RandomAgent implements IAgent {
 
 	@Override
 	public IOffer getOffer(MarketInformation marketInformation) {
-		return null;
+		double action = Math.random() - 0.5d;
+		long numShares = Math.round(Math.floor(500 * Math.random()));
+		double price = Math.random() + 0.5d;
+
+		IOffer offer;
+
+		if (action >= 0.5 - Configuration.randActionTakingRange) {
+			offer = new BuyOffer();
+		} else if (action <= -0.5 + Configuration.randActionTakingRange) {
+			offer = new SaleOffer();
+		} else {
+			offer = new NoOffer();
+		}
+
+		offer.setShares((int) numShares);
+		offer.setPrice(price);
+
+		return offer;
 	}
 
 	@Override

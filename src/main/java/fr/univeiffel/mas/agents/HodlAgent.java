@@ -27,12 +27,12 @@ public class HodlAgent implements IAgent {
 
 	@Override
 	public IOffer getOffer(MarketInformation marketInformation) {
-		long numSharesToBuy = Math.round(Math.floor(accountBalance /marketInformation.price()));
+		long numSharesToBuy = Math.round(Math.floor(0.1 * accountBalance / marketInformation.price()));
 		IOffer offer;
 
 		if (numSharesToBuy > 0) {
 			offer = new BuyOffer();
-			offer.setValue((int) numSharesToBuy);
+			offer.setShares((int) numSharesToBuy);
 		} else {
 			offer = new NoOffer();
 		}

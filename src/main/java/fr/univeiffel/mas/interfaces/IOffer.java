@@ -1,6 +1,8 @@
 package fr.univeiffel.mas.interfaces;
 
 public interface IOffer {
-	public int getValue();
-	public void setValue(int value);
+	public int getShares();
+	public void setShares(int shares);
+	public double getPrice();
+	public void setPrice(double price);
 }
