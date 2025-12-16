@@ -1,6 +1,9 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
+import fr.univeiffel.mas.datatypes.BuyOffer;
+import fr.univeiffel.mas.datatypes.MarketInformation;
+import fr.univeiffel.mas.datatypes.NoOffer;
 import fr.univeiffel.mas.datatypes.Position;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
@@ -23,8 +26,18 @@ public class HodlAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(double currentPrice) {
-		return null;
+	public IOffer getOffer(MarketInformation marketInformation) {
+		long numSharesToBuy = Math.round(Math.floor(accountBalance /marketInformation.price()));
+		IOffer offer;
+
+		if (numSharesToBuy > 0) {
+			offer = new BuyOffer();
+			offer.setValue((int) numSharesToBuy);
+		} else {
+			offer = new NoOffer();
+		}
+
+		return offer;
 	}
 
 	@Override

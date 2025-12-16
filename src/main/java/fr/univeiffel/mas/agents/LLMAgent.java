@@ -1,9 +1,12 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
+import fr.univeiffel.mas.datatypes.MarketInformation;
 import fr.univeiffel.mas.datatypes.Position;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +16,7 @@ import java.util.List;
 public class LLMAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private URL LLMURL;
 
@@ -23,7 +27,7 @@ public class LLMAgent implements IAgent {
 		try {
 			LLMURL = new URL(Configuration.LLMAddress);
 		} catch (MalformedURLException e) {
-
+			logger.error("URL was malformed", e);
 		}
 	}
 
@@ -33,7 +37,7 @@ public class LLMAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(double currentPrice) {
+	public IOffer getOffer(MarketInformation marketInformation) {
 		return null;
 	}
 

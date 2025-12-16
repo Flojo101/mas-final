@@ -1,6 +1,7 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
+import fr.univeiffel.mas.datatypes.MarketInformation;
 import fr.univeiffel.mas.datatypes.Position;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
@@ -24,7 +25,7 @@ public class MMAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(double currentPrice) {
+	public IOffer getOffer(MarketInformation marketInformation) {
 		return null;
 	}
 
