@@ -8,12 +8,11 @@ public class Configuration {
 	public static String LLMAddress = " http://localhost:11434/api/generate";	// default OLLAMA URL
 	public static double randActionTakingRange = 0.2d;
 	public static int priceHistoryLength = 2;
-	public static double minMaxProfitMargin = 0.10d;
 	public static double marketMakerProfitMargin = 0.01d;
 	public static int MMMinimumShares = 5000;
 	public static double LLMProfitMargin = 0.05d;
 
-	public static double goodEventProbability = 0.75d;
+	public static double goodEventProbability = 0.55d;
 	public static double eventOccurrenceProbability = 0.10d;
 	public static double eventNoEffectProbability = 0.05d;
 	public static double eventOppositeEffectProbability = 0.01d;

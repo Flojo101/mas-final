@@ -96,6 +96,12 @@ public class MMAgent implements IAgent {
 			offerList.add(mmOffer);
 		}
 
+		IOffer permBuyOffer = new BuyOffer();
+		permBuyOffer.setShares(100);
+		permBuyOffer.setPrice(marketInformation.price() - 1.0d);
+		permBuyOffer.setOfferer(this);
+		offerList.add(permBuyOffer);
+
 		return offerList;
 	}
 

@@ -55,15 +55,27 @@ public class RandomAgent implements IAgent {
 			offer = new NoOffer();
 		}
 
+		int ownedShares = 0;
+
+		for (Position p : positions) {
+			ownedShares += p.getShares();
+		}
+
 		if (accountBalance < 0) {
 			offer = new NoOffer();
 		} else if (price * numShares > accountBalance) {
 			numShares = Math.round(Math.floor(accountBalance / marketInformation.price()));
+		} else if (offer instanceof SaleOffer && (offer.getShares() == 0 || positions.isEmpty())) {
+			offer = new NoOffer();
 		}
 
 		offer.setShares((int) numShares);
 		offer.setPrice(price);
 		offer.setOfferer(this);
+
+		if (offer instanceof SaleOffer && offer.getShares() > ownedShares) {
+			offer.setShares(ownedShares);
+		}
 
 		offerList.add(offer);
 
