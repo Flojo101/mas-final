@@ -36,6 +36,21 @@ public class RandomAgent implements IAgent {
 			offer = new BuyOffer();
 		} else if (action <= -0.5 + Configuration.randActionTakingRange) {
 			offer = new SaleOffer();
+
+			int totalShares = 0;
+
+			for (Position p : positions) {
+				totalShares += p.getShares();
+			}
+
+			if (numShares < totalShares) {
+				numShares = totalShares;
+			}
+
+			if (numShares == 0) {
+				offer = new NoOffer();
+			}
+
 		} else {
 			offer = new NoOffer();
 		}

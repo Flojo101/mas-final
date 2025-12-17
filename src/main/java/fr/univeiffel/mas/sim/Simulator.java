@@ -1,11 +1,10 @@
 package fr.univeiffel.mas.sim;
 
 import fr.univeiffel.mas.Configuration;
-import fr.univeiffel.mas.datatypes.Event;
-import fr.univeiffel.mas.datatypes.EventType;
-import fr.univeiffel.mas.datatypes.MarketInformation;
+import fr.univeiffel.mas.datatypes.*;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
+import fr.univeiffel.mas.utilities.OfferComparator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +87,79 @@ public class Simulator {
 	}
 
 	public void resolveTrades(List<IOffer> offers) {
+		boolean tradeResolved = false;
 
+		List<IOffer> saleOffers = new ArrayList<>(offers.stream().filter(o -> o instanceof SaleOffer).toList());
+		List<IOffer> buyOffers = new ArrayList<>(offers.stream().filter(o -> o instanceof BuyOffer).toList());
+
+		do {
+			saleOffers.sort(new OfferComparator());
+			buyOffers.sort(new OfferComparator());
+
+			IOffer currentSaleOffer = saleOffers.getFirst();
+			IOffer currentBuyOffer = buyOffers.getLast();
+
+			if (currentSaleOffer.getPrice() > currentBuyOffer.getPrice()) {
+				// at least one can trade can be (partially) resolved
+				int tradeSize = Math.min(currentSaleOffer.getShares(), currentBuyOffer.getShares());
+				double sharePrice = currentBuyOffer.getPrice();
+
+				// Process seller-side
+				if (currentSaleOffer.getShares() > tradeSize) {
+					IOffer pOffer = new SaleOffer();
+					pOffer.setPrice(currentSaleOffer.getPrice());
+					pOffer.setShares(currentSaleOffer.getShares() - tradeSize);
+					pOffer.setOfferer(currentSaleOffer.getOfferer());
+
+					saleOffers.add(pOffer);
+				}
+
+				IAgent seller = currentSaleOffer.getOfferer();
+
+				int soldShares = 0;
+
+				do {
+					Position p = seller.getPositions().getFirst();
+
+					int posShares = p.getShares();
+
+					if (posShares > tradeSize - soldShares) {
+						seller.addToAccountBalance((tradeSize - soldShares) * currentPrice);
+
+						// Add partial position
+						seller.addPosition( new Position(posShares - (tradeSize - soldShares), p.getPrice()));
+
+						soldShares = tradeSize;
+					} else {
+						seller.addToAccountBalance(p.getShares() * currentPrice);
+
+						soldShares += p.getShares();
+					}
+
+					seller.getPositions().remove(p);
+				} while (soldShares < tradeSize);
+
+				saleOffers.remove(currentSaleOffer);
+
+				// Process buyer-side
+				if (currentBuyOffer.getShares() > tradeSize) {
+					IOffer partOffer = new BuyOffer();
+					partOffer.setShares(currentBuyOffer.getShares() - tradeSize);
+					partOffer.setPrice(currentBuyOffer.getPrice());
+					partOffer.setOfferer(currentBuyOffer.getOfferer());
+
+					buyOffers.add(partOffer);
+				}
+
+				IAgent buyer = currentBuyOffer.getOfferer();
+
+				buyer.subtractFromAccountBalance(tradeSize * currentPrice);
+				buyer.addPosition(new Position(tradeSize, currentPrice));
+				tradeResolved = true;
+			} else {
+				tradeResolved = false;
+			}
+		} while(tradeResolved);
 	}
 
 	public void setPrice() {
