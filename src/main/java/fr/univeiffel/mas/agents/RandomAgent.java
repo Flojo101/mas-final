@@ -57,6 +57,8 @@ public class RandomAgent implements IAgent {
 
 		if (accountBalance < 0) {
 			offer = new NoOffer();
+		} else if (price * numShares > accountBalance) {
+			numShares = Math.round(Math.floor(accountBalance / marketInformation.price()));
 		}
 
 		offer.setShares((int) numShares);

@@ -46,11 +46,30 @@ public class MMAgent implements IAgent {
 			offerList.add(mmOffer);
 		}
 
+		int heldShares = 0;
+
 		for (Position p : positions) {
+			heldShares += p.getShares();
+		}
+
+		int maxSaleableShares = heldShares - Configuration.MMMinimumShares;
+		int sharesOnOffer = 0;
+
+		for (Position p : positions) {
+			if (sharesOnOffer >= maxSaleableShares) {
+				break;
+			}
+
 			if (p.getPrice() * (1.0d + Configuration.marketMakerProfitMargin) <= marketInformation.price()) {
 				IOffer mmOffer = new SaleOffer();
 				mmOffer.setPrice(marketInformation.price() + 0.01d);
-				mmOffer.setShares(p.getShares());
+				if (p.getShares() > maxSaleableShares - sharesOnOffer) {
+					mmOffer.setShares(maxSaleableShares - sharesOnOffer);
+					sharesOnOffer += maxSaleableShares - sharesOnOffer;
+				} else {
+					mmOffer.setShares(p.getShares());
+					sharesOnOffer += p.getShares();
+				}
 				mmOffer.setOfferer(this);
 
 				offerList.add(mmOffer);
