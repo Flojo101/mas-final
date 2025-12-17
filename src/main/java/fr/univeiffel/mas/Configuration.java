@@ -11,4 +11,5 @@ public class Configuration {
 	public static double minMaxProfitMargin = 0.10d;
 	public static double marketMakerProfitMargin = 0.01d;
 	public static int MMMinimumShares = 5000;
+	public static double LLMProfitMargin = 0.05d;
 }
