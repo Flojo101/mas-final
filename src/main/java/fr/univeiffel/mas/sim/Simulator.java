@@ -237,7 +237,7 @@ public class Simulator {
 			IOffer currentSaleOffer = saleOffers.getFirst();
 			IOffer currentBuyOffer = buyOffers.getLast();
 
-			if (currentSaleOffer.getPrice() > currentBuyOffer.getPrice()) {
+			if (currentSaleOffer.getPrice() < currentBuyOffer.getPrice()) {
 				// at least one can trade can be (partially) resolved
 				int tradeSize = Math.min(currentSaleOffer.getShares(), currentBuyOffer.getShares());
 				double sharePrice = currentBuyOffer.getPrice();
