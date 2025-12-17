@@ -170,7 +170,7 @@ public class Simulator {
 			double valuation = agent.getAccountBalance();
 
 			for (Position p : agent.getPositions()) {
-				valuation += p.getPrice() * p.getShares();
+				valuation += (currentPrice - p.getPrice()) * p.getShares();
 			}
 			writer.append(Double.toString(valuation));
 			writer.append("\n");
@@ -317,6 +317,7 @@ public class Simulator {
 		}
 
 		currentPrice += mult * (currentPrice / 100) * Math.random() * Configuration.eventMaxEffect;
+		logger.atInfo().setMessage("Price is now {}").addArgument(currentPrice).log();
 	}
 
 	public List<IOffer> getOffers() {

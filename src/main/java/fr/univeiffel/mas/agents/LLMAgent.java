@@ -1,10 +1,7 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
-import fr.univeiffel.mas.datatypes.BuyOffer;
-import fr.univeiffel.mas.datatypes.MarketInformation;
-import fr.univeiffel.mas.datatypes.Position;
-import fr.univeiffel.mas.datatypes.SaleOffer;
+import fr.univeiffel.mas.datatypes.*;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 import org.slf4j.Logger;
@@ -116,10 +113,15 @@ public class LLMAgent implements IAgent {
 
 		if (output.contains("Good")) {
 			// We should buy what we can get
-			double shareprice = marketInformation.price() + 0.15d;
+			double shareprice = marketInformation.price() + 0.50d;
 			int numShares = (int) Math.round(Math.floor(accountBalance / shareprice));
 
 			IOffer offer = new BuyOffer();
+
+			if(numShares == 0) {
+				offer = new NoOffer();
+			}
+
 			offer.setShares(numShares);
 			offer.setPrice(shareprice);
 			offer.setOfferer(this);

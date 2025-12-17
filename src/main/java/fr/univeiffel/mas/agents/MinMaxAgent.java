@@ -42,9 +42,9 @@ public class MinMaxAgent implements IAgent {
 			offer = new BuyOffer();
 			offer.setShares((int) Math.round(Math.floor(accountBalance / marketInformation.price())));
 
-			double predictedPrice = marketInformation.price() + (marketInformation.price() - pricingHistory.peek()) / marketInformation.price() + 0.1d;
+			double predictedPrice = marketInformation.price() + (marketInformation.price() - pricingHistory.peek()) / marketInformation.price();
 			offer.setPrice(predictedPrice);
-		} else {
+		} else if (!positions.isEmpty()) {
 			offer = new SaleOffer();
 
 			int numShares = 0;
@@ -58,9 +58,11 @@ public class MinMaxAgent implements IAgent {
 
 			offer.setShares(numShares);
 			offer.setPrice(saleprice);
+		} else {
+			offer = new NoOffer();
 		}
 
-		if (positions.isEmpty()) {
+		if (offer.getShares() == 0) {
 			offer = new NoOffer();
 		}
 
