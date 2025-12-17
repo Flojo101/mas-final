@@ -252,6 +252,8 @@ public class Simulator {
 				int tradeSize = Math.min(currentSaleOffer.getShares(), currentBuyOffer.getShares());
 				double sharePrice = currentBuyOffer.getPrice();
 
+				logger.atInfo().setMessage("Trading {} shares for {} currency units").addArgument(tradeSize).addArgument(sharePrice).log();
+
 				// Process seller-side
 				if (currentSaleOffer.getShares() > tradeSize) {
 					IOffer pOffer = new SaleOffer();
@@ -279,7 +281,7 @@ public class Simulator {
 
 						soldShares = tradeSize;
 					} else {
-						seller.addToAccountBalance(p.getShares() * currentPrice);
+						seller.addToAccountBalance(p.getShares() * sharePrice);
 
 						soldShares += p.getShares();
 					}
@@ -301,7 +303,7 @@ public class Simulator {
 
 				IAgent buyer = currentBuyOffer.getOfferer();
 
-				buyer.subtractFromAccountBalance(tradeSize * currentPrice);
+				buyer.subtractFromAccountBalance(tradeSize * sharePrice);
 				buyer.addPosition(new Position(tradeSize, currentPrice));
 
 				buyOffers.remove(currentBuyOffer);
