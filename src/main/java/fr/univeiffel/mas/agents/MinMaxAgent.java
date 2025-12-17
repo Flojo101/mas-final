@@ -38,13 +38,21 @@ public class MinMaxAgent implements IAgent {
 		IOffer offer;
 		List<IOffer> offerList = new ArrayList<>();
 
+		// Check if the market has gone up
+		// Instead of looking for peaks, this agent is intended to look for long-term trends by comparing the current
+		// market value with the value n moments ago (n can be configured by adjusting the length of the pricing history
+		// this agent remembers)
 		if (pricingHistory.peek() < marketInformation.price()) {
+			// When the agent decides to buy shares, it goes all in
+
 			offer = new BuyOffer();
 			offer.setShares((int) Math.round(Math.floor(accountBalance / marketInformation.price())));
 
 			double predictedPrice = marketInformation.price() + 0.1d;
 			offer.setPrice(predictedPrice);
 		} else if (!positions.isEmpty()) {
+
+			// If the market is trending downwards, the agent tries to dump all the shares it can
 			offer = new SaleOffer();
 
 			int numShares = 0;
@@ -68,6 +76,7 @@ public class MinMaxAgent implements IAgent {
 
 		offer.setOfferer(this);
 
+		// Only after deciding on the action is the pricing history updated
 		try {
 			pricingHistory.take();
 			pricingHistory.add(marketInformation.price());

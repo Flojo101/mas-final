@@ -29,9 +29,9 @@ public class MMAgent implements IAgent {
 
 	@Override
 	public List<IOffer> getOffer(MarketInformation marketInformation) {
-		// Always post a certain liquidity
-		// Sell shares if profitable
-		// keep minimum share level
+		// The market maker tries to make a profit through simple arbitrage, but it is also forced to offer a certain
+		// amount of shares for sale and purchase at every time. Apart from sales due to arbitrage, the pricing on the
+		// forced offers is below market rate, but keeps the market liquid
 
 		List<IOffer> offerList = new ArrayList<>();
 
@@ -51,6 +51,9 @@ public class MMAgent implements IAgent {
 		for (Position p : positions) {
 			heldShares += p.getShares();
 		}
+
+		// The Market maker needs to provide shares at any moment, therefore it has a strict lower limit on the amount
+		// of shares it can hold. If this limit is violated, it is forced to buy shares at a highly elevated price
 
 		int maxSaleableShares = heldShares - Configuration.MMMinimumShares;
 		int sharesOnOffer = 0;
@@ -96,6 +99,7 @@ public class MMAgent implements IAgent {
 			offerList.add(mmOffer);
 		}
 
+		// This is the permanent buy offer, always 1 currency unit below market rate
 		IOffer permBuyOffer = new BuyOffer();
 		permBuyOffer.setShares(100);
 		permBuyOffer.setPrice(marketInformation.price() - 1.0d);

@@ -28,10 +28,13 @@ public class HodlAgent implements IAgent {
 
 	@Override
 	public List<IOffer> getOffer(MarketInformation marketInformation) {
+		// Check how many shares can be bought from 10% of the available account balance
+		// To spread buy-side demand, the agent doesnt just place a buy order for several hundred shares at the start
 		long numSharesToBuy = Math.round(Math.floor(0.1 * accountBalance / marketInformation.price()));
 		IOffer offer;
 		List<IOffer> offerList = new ArrayList<>();
 
+		// If no shares can be bought, don't order anything
 		if (numSharesToBuy > 0) {
 			offer = new BuyOffer();
 			offer.setShares((int) numSharesToBuy);
@@ -39,6 +42,7 @@ public class HodlAgent implements IAgent {
 			offer = new NoOffer();
 		}
 
+		// For improved order resolution, the "standard" agents use the same margins
 		offer.setPrice(marketInformation.price() + 0.1d);
 
 		offer.setOfferer(this);

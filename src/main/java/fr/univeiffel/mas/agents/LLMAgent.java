@@ -54,7 +54,7 @@ public class LLMAgent implements IAgent {
 		try {
 			conn = (HttpURLConnection) LLMURL.openConnection();
 		} catch (IOException e) {
-			logger.error("Exception on ocnnect", e);
+			logger.error("Exception on connect", e);
 		}
 
 		if (conn == null) {
@@ -72,6 +72,7 @@ public class LLMAgent implements IAgent {
 
 		// Build message
 		// Use granite3.1-moe:1b model for speed and accuracy
+		// The message follows a simple template, market news can easily be inserted as they are presented by the market
 		String message = "{" +
 				"   \"model\": \"granite3.1-moe:1b\",\n" +
 				"   \"prompt\": \"I am an AI agent trading a fictional asset on a simulated stock market. The following event has just occured: ";
@@ -110,6 +111,11 @@ public class LLMAgent implements IAgent {
 		} catch (IOException e) {
 			logger.error("Error reading response", e);
 		}
+
+		// The output is only checked for occurence of the word "Good"
+		// All LLMs I tested thoroughly followed the instruction of either answering with good or bad as a single word
+		// The standard message format also does not contain either of these words, so no JSON parsing is necessary
+		// The LLMs advice is strictly followed at all times
 
 		if (output.contains("Good")) {
 			// We should buy what we can get
