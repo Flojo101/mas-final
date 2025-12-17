@@ -1,10 +1,12 @@
 package fr.univeiffel.mas.datatypes;
 
+import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 
 public class BuyOffer implements IOffer {
 	private int shares;
 	private double price;
+	private IAgent offerer;
 
 	@Override
 	public int getShares() {
@@ -24,5 +26,15 @@ public class BuyOffer implements IOffer {
 	@Override
 	public void setPrice(double price) {
 		this.price = price;
+	}
+
+	@Override
+	public IAgent getOfferer() {
+		return offerer;
+	}
+
+	@Override
+	public void setOfferer(IAgent offerer) {
+		this.offerer = offerer;
 	}
 }
