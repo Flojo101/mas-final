@@ -116,7 +116,7 @@ public class LLMAgent implements IAgent {
 
 		if (output.contains("Good")) {
 			// We should buy what we can get
-			double shareprice = marketInformation.price() + 0.01d;
+			double shareprice = marketInformation.price() + 0.15d;
 			int numShares = (int) Math.round(Math.floor(accountBalance / shareprice));
 
 			IOffer offer = new BuyOffer();
