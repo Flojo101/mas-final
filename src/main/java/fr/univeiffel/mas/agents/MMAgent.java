@@ -1,8 +1,10 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
+import fr.univeiffel.mas.datatypes.BuyOffer;
 import fr.univeiffel.mas.datatypes.MarketInformation;
 import fr.univeiffel.mas.datatypes.Position;
+import fr.univeiffel.mas.datatypes.SaleOffer;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 
@@ -27,7 +29,50 @@ public class MMAgent implements IAgent {
 
 	@Override
 	public List<IOffer> getOffer(MarketInformation marketInformation) {
-		return null;
+		// Always post a certain liquidity
+		// Sell shares if profitable
+		// keep minimum share level
+
+		List<IOffer> offerList = new ArrayList<>();
+
+		for (int i = 1; i < 3; i++) {
+			int shareCount = Math.powExact(10, i);
+
+			IOffer mmOffer = new SaleOffer();
+			mmOffer.setPrice(marketInformation.price() + 0.01d * i);
+			mmOffer.setShares(shareCount);
+			mmOffer.setOfferer(this);
+
+			offerList.add(mmOffer);
+		}
+
+		for (Position p : positions) {
+			if (p.getPrice() * (1.0d + Configuration.marketMakerProfitMargin) <= marketInformation.price()) {
+				IOffer mmOffer = new SaleOffer();
+				mmOffer.setPrice(marketInformation.price() + 0.01d);
+				mmOffer.setShares(p.getShares());
+				mmOffer.setOfferer(this);
+
+				offerList.add(mmOffer);
+			}
+		}
+
+		int totalShares = 0;
+
+		for (Position p : positions) {
+			totalShares += p.getShares();
+		}
+
+		if (totalShares < Configuration.MMMinimumShares) {
+			IOffer mmOffer = new BuyOffer();
+			mmOffer.setPrice(marketInformation.price() + 0.10d);
+			mmOffer.setShares(Configuration.MMMinimumShares - totalShares);
+			mmOffer.setOfferer(this);
+
+			offerList.add(mmOffer);
+		}
+
+		return offerList;
 	}
 
 	@Override

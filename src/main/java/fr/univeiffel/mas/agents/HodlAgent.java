@@ -39,6 +39,8 @@ public class HodlAgent implements IAgent {
 			offer = new NoOffer();
 		}
 
+		offer.setPrice(1.01d * marketInformation.price());
+
 		offer.setOfferer(this);
 
 		offerList.add(offer);

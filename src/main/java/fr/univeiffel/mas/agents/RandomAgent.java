@@ -27,7 +27,7 @@ public class RandomAgent implements IAgent {
 	public List<IOffer> getOffer(MarketInformation marketInformation) {
 		double action = Math.random() - 0.5d;
 		long numShares = Math.round(Math.floor(500 * Math.random()));
-		double price = Math.random() + 0.5d;
+		double price = (Math.random() + 0.5d) * marketInformation.price();
 
 		IOffer offer;
 		List<IOffer> offerList = new ArrayList<>();

@@ -44,7 +44,9 @@ public class MinMaxAgent implements IAgent {
 		if (pricingHistory.peek() < marketInformation.price()) {
 			offer = new BuyOffer();
 			offer.setShares((int) Math.round(Math.floor(accountBalance / marketInformation.price())));
-			offer.setPrice(marketInformation.price());
+
+			double predictedPrice = marketInformation.price() + (marketInformation.price() - pricingHistory.peek()) / marketInformation.price();
+			offer.setPrice(predictedPrice);
 		} else {
 			offer = new SaleOffer();
 

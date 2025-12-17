@@ -9,4 +9,6 @@ public class Configuration {
 	public static double randActionTakingRange = 0.2d;
 	public static int priceHistoryLength = 2;
 	public static double minMaxProfitMargin = 0.10d;
+	public static double marketMakerProfitMargin = 0.01d;
+	public static int MMMinimumShares = 5000;
 }
