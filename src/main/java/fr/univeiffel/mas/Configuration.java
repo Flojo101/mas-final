@@ -7,4 +7,6 @@ public class Configuration {
 	public static double BasicAgentStartingBalance = 5000.0d;
 	public static String LLMAddress = " http://localhost:11434/api/generate";	// default OLLAMA URL
 	public static double randActionTakingRange = 0.2d;
+	public static int priceHistoryLength = 2;
+	public static double minMaxProfitMargin = 0.10d;
 }
