@@ -72,6 +72,7 @@ public class LLMAgent implements IAgent {
 		}
 
 		// Build message
+		// Use granite3.1-moe:1b model for speed and accuracy
 		String message = "{" +
 				"   \"model\": \"granite3.1-moe:1b\",\n" +
 				"   \"prompt\": \"I am an AI agent trading a fictional asset on a simulated stock market. The following event has just occured: ";
