@@ -28,3 +28,4 @@ Apart from logs, which are saved, simulation output is stored in several CSV fil
 All configuration options are located in `Configuration.java`.
 Just change the values there.
 Most meaningful are of course the chances of positive events, as well as the different consequence probabilities.
+New agents need to implement the `IAgent` interface and can easily be added in `Main.java`.
