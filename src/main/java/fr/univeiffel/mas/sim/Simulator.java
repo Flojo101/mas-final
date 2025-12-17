@@ -5,7 +5,12 @@ import fr.univeiffel.mas.datatypes.*;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 import fr.univeiffel.mas.utilities.OfferComparator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +21,7 @@ public class Simulator {
 	private List<Event> goodEvents = new ArrayList<>();
 	private List<Event> badEvents = new ArrayList<>();
 	private double currentPrice = Configuration.startingPrice;
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public void addAgent(IAgent agent) {
 		agents.add(agent);
@@ -37,6 +43,56 @@ public class Simulator {
 		badEvents.add(new Event(EventType.BAD, "Several customers have died due to lax security and safety practices at the company."));
 		badEvents.add(new Event(EventType.BAD, "The Russian government just took control of the companies manufacturing facilities without compensating the company."));
 
+		// Create output files
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("balances.csv"));
+
+			for (int i = 0; i < agents.size() - 1; i++) {
+				writer.append(agents.get(i).getName());
+				writer.append(',');
+			}
+
+			writer.append(agents.getLast().getName());
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("valuations.csv"));
+
+			for (int i = 0; i < agents.size() - 1; i++) {
+				writer.append(agents.get(i).getName());
+				writer.append(',');
+			}
+
+			writer.append(agents.getLast().getName());
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("price.csv"));
+
+			writer.append("MegaShare");
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
+
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("events.csv"));
+
+			writer.append("Event");
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
 	}
 
 	public void run() {
@@ -55,19 +111,73 @@ public class Simulator {
 	}
 
 	public void writeBalances() {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("balances.csv", true));
 
+			for (int i = 0; i < agents.size() - 1; i++) {
+				writer.append(Double.toString(agents.get(i).getAccountBalance()));
+				writer.append(',');
+			}
+
+			writer.append(Double.toString(agents.getLast().getAccountBalance()));
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
 	}
 
 	public void writeValuations() {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("valuations.csv", true));
 
+			for (int i = 0; i < agents.size() - 1; i++) {
+				IAgent agent = agents.get(i);
+				double valuation = agent.getAccountBalance();
+
+				for (Position p : agent.getPositions()) {
+					valuation += p.getPrice() * p.getShares();
+				}
+				writer.append(Double.toString(valuation));
+				writer.append(',');
+			}
+
+			IAgent agent = agents.getLast();
+			double valuation = agent.getAccountBalance();
+
+			for (Position p : agent.getPositions()) {
+				valuation += p.getPrice() * p.getShares();
+			}
+			writer.append(Double.toString(valuation));
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
 	}
 
 	public void writePrice() {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("price.csv", true));
 
+			writer.append(Double.toString(currentPrice));
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
 	}
 
 	public void writeEvent() {
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("events.csv", true));
 
+			writer.append(currentEvent.message());
+			writer.append("\n");
+			writer.close();
+		} catch (IOException e) {
+			logger.error("Error writing to file", e);
+		}
 	}
 
 	public void updateEvent() {
