@@ -23,10 +23,16 @@ public class Simulator {
 	private double currentPrice = Configuration.startingPrice;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	// The simulator keeps track of the different agents
+
 	public void addAgent(IAgent agent) {
 		agents.add(agent);
 	}
 
+
+	// The setup ensures the creation/erasure of the output files and controls the different news subjects. The number
+	// of good or bad news does not impact the probability of good vs bad news, this is exclusively controlled through
+	// the configuration
 	public void setup() {
 		// Create events
 		goodEvents.add(new Event(EventType.GOOD, "The company is recording record profits and is expected to continue " +
@@ -115,6 +121,7 @@ public class Simulator {
 		}
 	}
 
+	// The main loop just chains the necessary steps together
 	public void run() {
 		for (currentRound = 0; currentRound < Configuration.numRounds; currentRound++) {
 			logger.info("Starting round {}", currentRound);
@@ -204,6 +211,7 @@ public class Simulator {
 		}
 	}
 
+	// Each round, the current event can be updated. This is random, so the same event can occur for several rounds
 	public void updateEvent() {
 		if (Math.random() < 1 - Configuration.eventOccurrenceProbability) {
 			return;
@@ -220,6 +228,8 @@ public class Simulator {
 		}
 	}
 
+	// Trades don't need to be resolved in one step, instead they can be split into several partial trades to allow for
+	// easier trading without necessary coordination with regards to trade size between the agents
 	public void resolveTrades(List<IOffer> offers) {
 		boolean tradeResolved = false;
 
@@ -302,6 +312,10 @@ public class Simulator {
 		} while (tradeResolved);
 	}
 
+	// Due to the small number of participants, no functioning market could be established via pricing through trade
+	// resolution. Instead, the current event is mostly predictive of stock price movement. The different parameters can
+	// of course be configured. There also is a small chance of an event having no effect or even the opposite effect.
+	// This aims to simulate a larger market with a certain amount of irrationality
 	public void setPrice() {
 		double prob = Math.random();
 		int mult = 1;

@@ -25,6 +25,10 @@ public class RandomAgent implements IAgent {
 
 	@Override
 	public List<IOffer> getOffer(MarketInformation marketInformation) {
+		// This agent acts as randomly as possible. It was inspired by the monkeys writing Shakespeare.
+		// Whether it buys or sells is random, the amount of shares traded is random, and the price is random
+		// It is intended to create more trading activity in the market, until it inevitably goes bankrupt
+
 		double action = Math.random() - 0.5d;
 		long numShares = Math.round(Math.floor(500 * Math.random()));
 		double price = (Math.random() + 0.5d) * marketInformation.price();
@@ -54,6 +58,10 @@ public class RandomAgent implements IAgent {
 		} else {
 			offer = new NoOffer();
 		}
+
+		// Due to its random nature, a lot of checks had to be implemented to prevent it from submitting sales it cannot
+		// fulfill due to lack of the underlying asset. Since the simulator does not support the trading of derivatives,
+		// such trades are not possible
 
 		int ownedShares = 0;
 
