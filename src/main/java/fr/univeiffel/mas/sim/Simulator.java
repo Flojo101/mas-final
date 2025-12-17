@@ -293,6 +293,8 @@ public class Simulator {
 
 				buyer.subtractFromAccountBalance(tradeSize * currentPrice);
 				buyer.addPosition(new Position(tradeSize, currentPrice));
+
+				buyOffers.remove(currentBuyOffer);
 				tradeResolved = true;
 			} else {
 				tradeResolved = false;
