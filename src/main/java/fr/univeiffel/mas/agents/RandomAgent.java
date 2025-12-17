@@ -11,6 +11,7 @@ import java.util.List;
 public class RandomAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
+	private String name;
 
 	@Override
 	public void setup() {
@@ -23,12 +24,13 @@ public class RandomAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(MarketInformation marketInformation) {
+	public List<IOffer> getOffer(MarketInformation marketInformation) {
 		double action = Math.random() - 0.5d;
 		long numShares = Math.round(Math.floor(500 * Math.random()));
 		double price = Math.random() + 0.5d;
 
 		IOffer offer;
+		List<IOffer> offerList = new ArrayList<>();
 
 		if (action >= 0.5 - Configuration.randActionTakingRange) {
 			offer = new BuyOffer();
@@ -40,8 +42,11 @@ public class RandomAgent implements IAgent {
 
 		offer.setShares((int) numShares);
 		offer.setPrice(price);
+		offer.setOfferer(this);
 
-		return offer;
+		offerList.add(offer);
+
+		return offerList;
 	}
 
 	@Override
@@ -67,5 +72,15 @@ public class RandomAgent implements IAgent {
 	@Override
 	public void subtractFromAccountBalance(double toSubtract) {
 		accountBalance -= toSubtract;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

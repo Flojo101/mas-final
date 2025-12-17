@@ -17,6 +17,7 @@ public class LLMAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private String name;
 
 	private URL LLMURL;
 
@@ -37,7 +38,7 @@ public class LLMAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(MarketInformation marketInformation) {
+	public List<IOffer> getOffer(MarketInformation marketInformation) {
 		return null;
 	}
 
@@ -64,5 +65,15 @@ public class LLMAgent implements IAgent {
 	@Override
 	public void subtractFromAccountBalance(double toSubtract) {
 		accountBalance -= toSubtract;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

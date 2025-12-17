@@ -14,6 +14,7 @@ import java.util.List;
 public class HodlAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
+	private String name;
 
 	@Override
 	public void setup() {
@@ -26,9 +27,10 @@ public class HodlAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(MarketInformation marketInformation) {
+	public List<IOffer> getOffer(MarketInformation marketInformation) {
 		long numSharesToBuy = Math.round(Math.floor(0.1 * accountBalance / marketInformation.price()));
 		IOffer offer;
+		List<IOffer> offerList = new ArrayList<>();
 
 		if (numSharesToBuy > 0) {
 			offer = new BuyOffer();
@@ -37,7 +39,11 @@ public class HodlAgent implements IAgent {
 			offer = new NoOffer();
 		}
 
-		return offer;
+		offer.setOfferer(this);
+
+		offerList.add(offer);
+
+		return offerList;
 	}
 
 	@Override
@@ -63,5 +69,15 @@ public class HodlAgent implements IAgent {
 	@Override
 	public void subtractFromAccountBalance(double toSubtract) {
 		accountBalance -= toSubtract;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

@@ -12,6 +12,7 @@ import java.util.List;
 public class MMAgent implements IAgent {
 	private List<Position> positions = new ArrayList<>();
 	private double accountBalance;
+	private String name;
 
 	@Override
 	public void setup() {
@@ -25,7 +26,7 @@ public class MMAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(MarketInformation marketInformation) {
+	public List<IOffer> getOffer(MarketInformation marketInformation) {
 		return null;
 	}
 
@@ -52,5 +53,15 @@ public class MMAgent implements IAgent {
 	@Override
 	public void subtractFromAccountBalance(double toSubtract) {
 		accountBalance -= toSubtract;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }

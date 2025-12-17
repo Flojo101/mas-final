@@ -20,6 +20,7 @@ public class MinMaxAgent implements IAgent {
 	private double accountBalance;
 	private ArrayBlockingQueue<Double> pricingHistory = new ArrayBlockingQueue<>(Configuration.priceHistoryLength);
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
+	private String name;
 
 	@Override
 	public void setup() {
@@ -36,8 +37,9 @@ public class MinMaxAgent implements IAgent {
 	}
 
 	@Override
-	public IOffer getOffer(MarketInformation marketInformation) {
+	public List<IOffer> getOffer(MarketInformation marketInformation) {
 		IOffer offer;
+		List<IOffer> offerList = new ArrayList<>();
 
 		if (pricingHistory.peek() < marketInformation.price()) {
 			offer = new BuyOffer();
@@ -59,6 +61,8 @@ public class MinMaxAgent implements IAgent {
 			offer.setPrice(saleprice);
 		}
 
+		offer.setOfferer(this);
+
 		try {
 			pricingHistory.take();
 			pricingHistory.add(marketInformation.price());
@@ -66,7 +70,9 @@ public class MinMaxAgent implements IAgent {
 			logger.error("Queue is blocked", e);
 		}
 
-		return offer;
+		offerList.add(offer);
+
+		return offerList;
 	}
 
 	@Override
@@ -92,5 +98,15 @@ public class MinMaxAgent implements IAgent {
 	@Override
 	public void subtractFromAccountBalance(double toSubtract) {
 		accountBalance -= toSubtract;
+	}
+
+	@Override
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 }
