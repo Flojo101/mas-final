@@ -1,10 +1,7 @@
 package fr.univeiffel.mas.agents;
 
 import fr.univeiffel.mas.Configuration;
-import fr.univeiffel.mas.datatypes.BuyOffer;
-import fr.univeiffel.mas.datatypes.MarketInformation;
-import fr.univeiffel.mas.datatypes.Position;
-import fr.univeiffel.mas.datatypes.SaleOffer;
+import fr.univeiffel.mas.datatypes.*;
 import fr.univeiffel.mas.interfaces.IAgent;
 import fr.univeiffel.mas.interfaces.IOffer;
 import org.slf4j.Logger;
@@ -61,6 +58,10 @@ public class MinMaxAgent implements IAgent {
 
 			offer.setShares(numShares);
 			offer.setPrice(saleprice);
+		}
+
+		if (positions.isEmpty()) {
+			offer = new NoOffer();
 		}
 
 		offer.setOfferer(this);
