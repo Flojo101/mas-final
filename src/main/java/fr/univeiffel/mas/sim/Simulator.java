@@ -104,10 +104,13 @@ public class Simulator {
 	}
 
 	public void writeOutput() {
-		writeBalances();
-		writeValuations();
-		writePrice();
-		writeEvent();
+		for (currentRound = 0; currentRound < Configuration.numRounds; currentRound++) {
+			logger.info("Starting round " + currentRound);
+			writeBalances();
+			writeValuations();
+			writePrice();
+			writeEvent();
+		}
 	}
 
 	public void writeBalances() {

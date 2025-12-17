@@ -18,4 +18,5 @@ public class Configuration {
 	public static double eventNoEffectProbability = 0.05d;
 	public static double eventOppositeEffectProbability = 0.01d;
 	public static double eventMaxEffect = 5.0d;
+	public static long numRounds = 10000;
 }
