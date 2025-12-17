@@ -160,7 +160,7 @@ public class Simulator {
 				double valuation = agent.getAccountBalance();
 
 				for (Position p : agent.getPositions()) {
-					valuation += p.getPrice() * p.getShares();
+					valuation += (currentPrice - p.getPrice()) * p.getShares();
 				}
 				writer.append(Double.toString(valuation));
 				writer.append(',');
