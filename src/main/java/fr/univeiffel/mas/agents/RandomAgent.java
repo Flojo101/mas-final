@@ -55,6 +55,10 @@ public class RandomAgent implements IAgent {
 			offer = new NoOffer();
 		}
 
+		if (accountBalance < 0) {
+			offer = new NoOffer();
+		}
+
 		offer.setShares((int) numShares);
 		offer.setPrice(price);
 		offer.setOfferer(this);
