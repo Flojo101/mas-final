@@ -63,6 +63,11 @@ public class MMAgent implements IAgent {
 			totalShares += p.getShares();
 		}
 
+		// Always keep at least 50% of the minimum obligated holdings
+		if (totalShares < 0.5d * Configuration.MMMinimumShares) {
+			offerList.clear();
+		}
+
 		if (totalShares < Configuration.MMMinimumShares) {
 			IOffer mmOffer = new BuyOffer();
 			mmOffer.setPrice(marketInformation.price() + 0.10d);
