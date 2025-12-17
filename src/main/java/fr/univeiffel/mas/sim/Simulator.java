@@ -29,19 +29,34 @@ public class Simulator {
 
 	public void setup() {
 		// Create events
-		goodEvents.add(new Event(EventType.GOOD, "The company is recording record profits and is expected to continue growing."));
-		goodEvents.add(new Event(EventType.GOOD, "The company is expanding to the Asian market as part of growth strategy that has already proven itself in the American market."));
-		goodEvents.add(new Event(EventType.GOOD, "Amid unprecedented rises in consumer demand, the company is building a new manufacturing facility. Forecasts indicate that another facility is already necessary to cover the demand next year."));
-		goodEvents.add(new Event(EventType.GOOD, "Several consumer protection agencies have praised the companies products due to their high quality and excellent support, none of which is matched by any competitor."));
-		goodEvents.add(new Event(EventType.GOOD, "The company is expected to announce record profits in their earnings report next Friday, which are likely not priced in yet."));
-		goodEvents.add(new Event(EventType.GOOD, "The company has just closed several, multi-billion contracts with European governments. Their execution will occur during the next five years, coinciding with the creation of new production facilities. More contracts are expected in the near future."));
+		goodEvents.add(new Event(EventType.GOOD, "The company is recording record profits and is expected to continue " +
+				"growing."));
+		goodEvents.add(new Event(EventType.GOOD, "The company is expanding to the Asian market as part of growth " +
+				"strategy that has already proven itself in the American market."));
+		goodEvents.add(new Event(EventType.GOOD, "Amid unprecedented rises in consumer demand, the company is building" +
+				" a new manufacturing facility. Forecasts indicate that another facility is already necessary to cover" +
+				" the demand next year."));
+		goodEvents.add(new Event(EventType.GOOD, "Several consumer protection agencies have praised the companies " +
+				"products due to their high quality and excellent support, none of which is matched by any competitor" +
+				"."));
+		goodEvents.add(new Event(EventType.GOOD, "The company is expected to announce record profits in their earnings" +
+				" report next Friday, which are likely not priced in yet."));
+		goodEvents.add(new Event(EventType.GOOD, "The company has just closed several, multi-billion contracts with " +
+				"European governments. Their execution will occur during the next five years, coinciding with the " +
+				"creation of new production facilities. More contracts are expected in the near future."));
 
 		badEvents.add(new Event(EventType.BAD, "The sole factory of the company has just exploded."));
-		badEvents.add(new Event(EventType.BAD, "The C-Suite of the company was just arrested during a business trip due to mass fraud."));
+		badEvents.add(new Event(EventType.BAD, "The C-Suite of the company was just arrested during a business trip " +
+				"due to mass fraud."));
 		badEvents.add(new Event(EventType.BAD, "The company has just filed for bankruptcy."));
-		badEvents.add(new Event(EventType.BAD, "Several customers have gone bankrupt, and the company no longer has the cash to keep all its manufacturing facilities operating."));
-		badEvents.add(new Event(EventType.BAD, "Several customers have died due to lax security and safety practices at the company."));
-		badEvents.add(new Event(EventType.BAD, "The Russian government just took control of the companies manufacturing facilities without compensating the company."));
+		badEvents.add(new Event(EventType.BAD, "Several customers have gone bankrupt, and the company no longer has " +
+				"the cash to keep all its manufacturing facilities operating."));
+		badEvents.add(new Event(EventType.BAD, "Several customers have died due to lax security and safety practices " +
+				"at the company."));
+		badEvents.add(new Event(EventType.BAD, "The Russian government just took control of the companies " +
+				"manufacturing facilities without compensating the company."));
+
+		currentEvent = goodEvents.getFirst();
 
 		// Create output files
 		try {
@@ -93,24 +108,30 @@ public class Simulator {
 		} catch (IOException e) {
 			logger.error("Error writing to file", e);
 		}
+
+		// setup agents
+		for (IAgent agent : agents) {
+			agent.setup();
+		}
 	}
 
 	public void run() {
-		updateEvent();
-		List<IOffer> offers = getOffers();
-		resolveTrades(offers);
-		writeOutput();
-		setPrice();
+		for (currentRound = 0; currentRound < Configuration.numRounds; currentRound++) {
+			logger.info("Starting round {}", currentRound);
+			updateEvent();
+			List<IOffer> offers = getOffers();
+			resolveTrades(offers);
+			writeOutput();
+			setPrice();
+		}
 	}
 
 	public void writeOutput() {
-		for (currentRound = 0; currentRound < Configuration.numRounds; currentRound++) {
-			logger.info("Starting round " + currentRound);
-			writeBalances();
-			writeValuations();
-			writePrice();
-			writeEvent();
-		}
+
+		writeBalances();
+		writeValuations();
+		writePrice();
+		writeEvent();
 	}
 
 	public void writeBalances() {
@@ -206,6 +227,10 @@ public class Simulator {
 		List<IOffer> buyOffers = new ArrayList<>(offers.stream().filter(o -> o instanceof BuyOffer).toList());
 
 		do {
+			if (saleOffers.isEmpty() || buyOffers.isEmpty()) {
+				return;
+			}
+
 			saleOffers.sort(new OfferComparator());
 			buyOffers.sort(new OfferComparator());
 
@@ -240,7 +265,7 @@ public class Simulator {
 						seller.addToAccountBalance((tradeSize - soldShares) * currentPrice);
 
 						// Add partial position
-						seller.addPosition( new Position(posShares - (tradeSize - soldShares), p.getPrice()));
+						seller.addPosition(new Position(posShares - (tradeSize - soldShares), p.getPrice()));
 
 						soldShares = tradeSize;
 					} else {
@@ -272,7 +297,7 @@ public class Simulator {
 			} else {
 				tradeResolved = false;
 			}
-		} while(tradeResolved);
+		} while (tradeResolved);
 	}
 
 	public void setPrice() {

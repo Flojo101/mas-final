@@ -26,7 +26,7 @@ public class MinMaxAgent implements IAgent {
 	public void setup() {
 		accountBalance = Configuration.BasicAgentStartingBalance;
 
-		for (int i = 0; i < pricingHistory.size(); i ++) {
+		for (int i = 0; i < Configuration.priceHistoryLength; i ++) {
 			pricingHistory.add(Configuration.startingPrice);
 		}
 	}

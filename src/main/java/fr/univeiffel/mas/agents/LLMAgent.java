@@ -67,6 +67,8 @@ public class LLMAgent implements IAgent {
 		try {
 			conn.setRequestMethod("POST");
 			conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+			conn.setDoOutput(true);
+			conn.setDoInput(true);
 		} catch (ProtocolException e) {
 			throw new RuntimeException(e);
 		}
